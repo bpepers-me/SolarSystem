@@ -1,0 +1,6 @@
+package improbable.core;
+
+component PlanetIndex {
+    id = 1007;
+    uint32 index = 1;
+}

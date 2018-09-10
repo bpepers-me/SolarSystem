@@ -43,17 +43,18 @@ namespace Assets.Gamelogic.EntityTemplates
             return playerTemplate;
         }
 
-        public static Entity CreateCubeTemplate()
+        public static Entity CreatePlanetTemplate(uint planetIndex)
         {
-            var cubeTemplate = EntityBuilder.Begin()
+            var planetTemplate = EntityBuilder.Begin()
                 .AddPositionComponent(Improbable.Coordinates.ZERO.ToUnityVector(), CommonRequirementSets.PhysicsOnly)
-                .AddMetadataComponent(entityType: SimulationSettings.CubePrefabName)
+                .AddMetadataComponent(entityType: SimulationSettings.PlanetPrefabName)
                 .SetPersistence(true)
                 .SetReadAcl(CommonRequirementSets.PhysicsOrVisual)
                 .AddComponent(new Rotation.Data(Quaternion.identity.ToNativeQuaternion()), CommonRequirementSets.PhysicsOnly)
+                .AddComponent(new PlanetIndex.Data(planetIndex), CommonRequirementSets.PhysicsOnly)
                 .Build();
 
-            return cubeTemplate;
+            return planetTemplate;
         }
     }
 }
