@@ -1,7 +1,83 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Improbable;
+using Improbable.Core;
+using Improbable.Unity;
+using Improbable.Unity.Visualizer;
 using UnityEngine;
+using Assets.Gamelogic.Core;
 
+namespace Assets.Gamelogic.Planets
+{
+    [WorkerType(WorkerPlatform.UnityWorker)]
+    public class PlanetOrbit : MonoBehaviour
+    {
+        [Require]
+        private Position.Writer positionWriter;
+
+        [Require]
+        private Rotation.Writer rotationWriter;
+
+        [Require]
+        private PlanetIndex.Reader planetIndexReader;
+
+		private const float orbitSpeed = 864000.0f;
+        private const float rotationSpeed = 24.0f;
+        private float time = 0;
+        private Assets.Gamelogic.Core. PlanetData planetData;
+
+        void OnEnable()
+        {
+            transform.position = positionWriter.Data.coords.ToUnityVector();
+            transform.rotation = rotationWriter.Data.rotation.ToUnityQuaternion();
+            planetData = PlanetInfo.GetData(planetIndexReader.Data.index);
+        }
+
+        public void FixedUpdate()
+        {
+            var deltaTime = Time.deltaTime;
+            time += deltaTime;
+            transform.position = CalculatePosition(time);
+            transform.rotation = CalculateRotation(time);
+            positionWriter.Send(new Position.Update().SetCoords(transform.position.ToImprobable()));
+            rotationWriter.Send(new Rotation.Update().SetRotation(transform.rotation.ToImprobable()));
+        }
+
+        private Vector3 CalculatePosition(float time)
+        {
+            // TODO: this calculates the orbit as a circle but should be an ellipse
+			float days = time * orbitSpeed / 86400.0f;
+			float orbitalPeriod = planetData.orbitalPeriod * 365.0f;
+			float angle = (days % orbitalPeriod) / orbitalPeriod * 360f;
+			UnityEngine.Quaternion q = UnityEngine.Quaternion.Euler(0, angle, 0);
+			return q * new Vector3(planetData.orbitRadius, 0, 0);
+        }
+
+        private UnityEngine.Quaternion CalculateRotation(float time)
+        {
+            float hours = time * rotationSpeed / 3600.0f;
+            float rotationPeriod = planetData.rotationPeriod;
+            float angle = (hours % rotationPeriod) / rotationPeriod * 360f;
+            return UnityEngine.Quaternion.Euler(0, angle, 0);
+        }
+    }
+
+    public static class Vector3Extensions
+    {
+        public static Coordinates ToImprobable(this Vector3 vector3)
+        {
+            return new Coordinates(vector3.x, vector3.y, vector3.z);
+        }
+    }
+
+    public static class QuaternionExtensions
+    {
+        public static Improbable.Core.Quaternion ToImprobable(this UnityEngine.Quaternion quat)
+        {
+            return new Improbable.Core.Quaternion(quat.x, quat.y, quat.z, quat.w);
+        }
+    }
+}
+
+#if FOO
 public class PlanetOrbit : MonoBehaviour
 {
     public float eccentricity;
@@ -124,3 +200,4 @@ public class PlanetOrbit : MonoBehaviour
         }
     }
 }
+#endif

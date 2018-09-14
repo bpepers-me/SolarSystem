@@ -7,7 +7,9 @@ enum ResponseCode {
   Failure = 4;
 }
 
-type CreatePlayerRequest {}
+type CreatePlayerRequest {
+}
+
 type CreatePlayerResponse {
   ResponseCode response_code = 1;
   option<int32> failure_code = 2;

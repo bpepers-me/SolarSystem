@@ -74,7 +74,6 @@ namespace Assets.Gamelogic.Core
                 {
                     CreatePlayerEntity(clientWorkerId, responseHandle);
                 }
-
             }
         }
 
@@ -100,7 +99,7 @@ namespace Assets.Gamelogic.Core
         private void CreatePlayerEntity(string clientWorkerId,
                                         ResponseHandle<PlayerCreation.Commands.CreatePlayer, CreatePlayerRequest, CreatePlayerResponse> responseHandle)
         {
-            var playerEntityTemplate = EntityTemplateFactory.CreatePlayerTemplate(clientWorkerId, gameObject.EntityId());
+            var playerEntityTemplate = EntityTemplateFactory.CreatePlayerTemplate(clientWorkerId, gameObject.EntityId(), new Vector3(0, 0, 0));
             SpatialOS.Commands.CreateEntity(PlayerCreationWriter, playerEntityTemplate)
                 .OnSuccess(response =>
                      {

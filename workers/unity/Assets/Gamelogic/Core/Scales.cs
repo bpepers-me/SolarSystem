@@ -3,6 +3,11 @@ using System.Collections;
 
 public static class Scales
 {
+    public const float earthMass = 5.9722e24f;          // in kg
+    public const float earthTilt = 7.155f;              // in degrees (to sun's equator)
+    public const float earthRotationPeriod = 1f;        // in days
+    public const float earthOrbitPeriod = 365.256f;     // in days
+
     public const float gravityColliderMult = 30;
     public const float messageDuration = 8f;
     public const float maxSpaceShipSpeed = 16.28f;

@@ -18,7 +18,11 @@ namespace Assets.Editor
 			var currentEntityId = 1;
 
 			snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreatePlayerCreatorTemplate());
-			snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreatePlanetTemplate(0));
+
+            for (uint i = 0; i < 9; ++i)
+            {
+                snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreatePlanetTemplate(i));
+            }
 
 			SaveSnapshot(snapshotEntities);
 		}

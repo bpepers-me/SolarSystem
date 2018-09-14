@@ -1,0 +1,16 @@
+package improbable.ship;
+
+type Fire {}
+
+component ShipControls {
+    // Component ID, unique within the project
+    id = 1011;
+
+    // The speed at which the ship wants to move at
+    float target_speed = 1;
+    // The direction the ship wants to be steering in
+    float target_steering = 2;
+
+    // The component event for triggering firing
+    event Fire fire;
+}
