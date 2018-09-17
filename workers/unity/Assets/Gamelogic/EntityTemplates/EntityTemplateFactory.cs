@@ -41,7 +41,7 @@ namespace Assets.Gamelogic.EntityTemplates
                 .SetPersistence(false)
                 .SetReadAcl(CommonRequirementSets.PhysicsOrVisual)
                 .AddComponent(new TransformInfo.Data(position.ToImprobable(), rotation.ToImprobable(), scale.ToImprobable()), CommonRequirementSets.SpecificClientOnly(clientId))
-                .AddComponent(new ShipControls.Data(0, 0), CommonRequirementSets.SpecificClientOnly(clientId))
+                .AddComponent(new ShipControls.Data(0, 0, false), CommonRequirementSets.SpecificClientOnly(clientId))
                 .AddComponent(new ClientAuthorityCheck.Data(), CommonRequirementSets.SpecificClientOnly(clientId))
                 .AddComponent(new ClientConnection.Data(SimulationSettings.TotalHeartbeatsBeforeTimeout, clientId, playerCreatorId), CommonRequirementSets.PhysicsOnly)
                 .Build();

@@ -44,7 +44,6 @@ namespace Assets.Gamelogic.Core
         // Search for the PlayerCreator entity in the world in order to send a CreatePlayer command.
         public void CreatePlayer()
         {
-            Debug.Log("search for player creator");
             var playerCreatorQuery = Query.HasComponent<PlayerCreation>().ReturnOnlyEntityIds();
             SpatialOS.WorkerCommands.SendQuery(playerCreatorQuery)
                 .OnSuccess(OnSuccessfulPlayerCreatorQuery)

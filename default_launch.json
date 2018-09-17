@@ -65,7 +65,9 @@
                     },
                     "entity_query": {
                         "allow": true,
-                        "components": [ ]
+                        "components": [
+                            "*"
+                        ]
                     }
                 }
             ]

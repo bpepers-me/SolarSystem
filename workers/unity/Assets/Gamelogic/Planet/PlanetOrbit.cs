@@ -29,9 +29,6 @@ namespace Assets.Gamelogic.Planets
 
         void OnEnable()
         {
-            //transform.position = positionWriter.Data.coords.ToUnityVector();
-            //transform.rotation = rotationWriter.Data.rotation.ToUnityQuaternion();
-
             initialAngle = orbitInfoReader.Data.initialAngle;
             orbitRadius = orbitInfoReader.Data.orbitRadius;
             orbitPeriod = orbitInfoReader.Data.orbitPeriod;

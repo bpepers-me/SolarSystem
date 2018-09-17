@@ -10,10 +10,11 @@
     },
     "entity_interest": {
       "range_entity_interest": {
-        "radius": 10
+        "radius": 100
       }
     },
-    "streaming_query": [],
+    "streaming_query": [
+    ],
     "component_delivery": {
       "default": "RELIABLE_ORDERED",
       "checkout_all_initially": true,

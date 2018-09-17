@@ -12,8 +12,12 @@ component ShipControls {
 
     // The speed at which the ship wants to move at
     float target_speed = 1;
+	
     // The direction the ship wants to be steering in
     float target_steering = 2;
+
+	// Are we using warp speed (10x faster)
+	bool warp_speed = 3;
 
     // The component event for triggering firing
     event Fire fire;

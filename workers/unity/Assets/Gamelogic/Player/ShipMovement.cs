@@ -1,10 +1,15 @@
 using System;
 using Improbable;
 using Improbable.Core;
+using Improbable.Unity;
+using Improbable.Unity.Configuration;
+using Improbable.Unity.Core;
+using Improbable.Unity.Core.EntityQueries;
 using Improbable.Ship;
 using Improbable.Unity.Visualizer;
 using UnityEngine;
 using Vector3d = UnityEngine.Vector3d;
+using Improbable.Worker;
 
 namespace Assets.Gamelogic.Player
 {
@@ -73,24 +78,25 @@ namespace Assets.Gamelogic.Player
         // Move ship using local speed and steer value
         public void FixedUpdate()
         {
+			var warpSpeed = ShipControlsReader.Data.warpSpeed;
             var deltaTime = Time.deltaTime;
-            ApplyPhysicsToShip(deltaTime);
+            ApplyPhysicsToShip(warpSpeed, deltaTime);
             SendPositionAndRotationUpdates();
         }
 
-        private void ApplyPhysicsToShip(double deltaTime)
+        private void ApplyPhysicsToShip(bool warpSpeed, double deltaTime)
         {
-            var velocityChange = CalculateVelocityChange(deltaTime);
+            var velocityChange = CalculateVelocityChange(warpSpeed, deltaTime);
             var torqueToApply = CalculateTorqueToApply(deltaTime);
 
             myRigidbody.AddTorque(torqueToApply);
             myRigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
         }
 
-        private Vector3 CalculateVelocityChange(double deltaTime)
+        private Vector3 CalculateVelocityChange(bool warpSpeed, double deltaTime)
         {
             var currentVelocity = myRigidbody.velocity;
-            var targetVelocity = transform.localRotation * Vector3.forward * (float)(currentSpeed * deltaTime * MovementSpeed);
+            var targetVelocity = transform.localRotation * Vector3.forward * (float)(currentSpeed * deltaTime * MovementSpeed * (warpSpeed ? 10.0 : 1.0));
             return targetVelocity - currentVelocity;
         }
 
@@ -111,7 +117,28 @@ namespace Assets.Gamelogic.Player
 
 		private void OnWarp(Warp warp)
 		{
-			myRigidbody.position = new Vector3(0, 0, 0);
+            if (warp.planetIndex == 999)
+            {
+                myRigidbody.position = new Vector3(0f, 0f, 0f);
+                return;
+            }
+
+            var planetQuery = Query.HasComponent<PlanetIndex>().ReturnAllComponents();
+            SpatialOS.WorkerCommands.SendQuery(planetQuery)
+                .OnSuccess(result =>
+                {
+                    var entities = result.Entities.Values;
+                    foreach (var entity in entities)
+                    {
+                        if (entity.Get<PlanetIndex>().Value.Get().Value.index == warp.planetIndex)
+                        {
+                            var position = entity.Get<TransformInfo>().Value.Get().Value.position.FromImprobable();
+                            var unityPosition = (Vector3)(position / Scales.unityFactor);
+                            myRigidbody.position = unityPosition;
+                        }
+                    }
+                })
+                .OnFailure(errorDetails => Debug.Log("Planet query failed: " + errorDetails));
 		}
     }
 }
