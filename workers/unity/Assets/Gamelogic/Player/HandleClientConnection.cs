@@ -65,10 +65,10 @@ namespace Assets.Gamelogic.Player
 
         private void DeletePlayerEntity()
         {
-            //SpatialOS.Commands.SendCommand(ClientConnectionWriter,
-            //                               PlayerCreation.Commands.DeletePlayer.Descriptor,
-            //                               new DeletePlayerRequest(ClientConnectionWriter.Data.clientId),
-            //                               ClientConnectionWriter.Data.playerCreatorId);
+            SpatialOS.Commands.SendCommand(ClientConnectionWriter,
+                                           PlayerCreation.Commands.DeletePlayer.Descriptor,
+                                           new DeletePlayerRequest(ClientConnectionWriter.Data.clientId),
+                                           ClientConnectionWriter.Data.playerCreatorId);
         }
     }
 }

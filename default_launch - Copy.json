@@ -14,26 +14,21 @@
         {
             "worker_type": "UnityWorker",
             "load_balancing": {
-                "points_of_interest": {
-                    "num_workers": 4,
-                    "points": [
-                        {
-                            "x": 400,
-                            "z": 400
-                        },
-                        {
-                            "x": 400,
-                            "z": -400
-                        },
-                        {
-                            "x": -400,
-                            "z": 400
-                        },
-                        {
-                            "x": -400,
-                            "z": -400
+                "dynamic_loadbalancer": {
+                    "worker_scaler_config": {
+                        "entity_count_config": {
+                            "entities_per_worker": 250
                         }
-                    ]
+                    },
+                    "worker_placer_config": {
+                        "random_params": {}
+                    },
+                    "loadbalancer_config": {
+                        "min_range_meters": 500.0,
+                        "max_range_meters": 5000.0,
+                        "speed_meters_per_second": 100.0,
+                        "expansion_time_millis": 60000
+                    }
                 }
             },
             "permissions": [

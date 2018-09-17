@@ -1,0 +1,12 @@
+package improbable.core;
+
+import "improbable/vector3.schema";
+import "improbable/core/Quaternion.schema";
+
+component TransformInfo {
+	id = 1013;
+
+	improbable.Vector3d position = 1;
+	improbable.core.Quaternion rotation = 2;
+	improbable.Vector3d scale = 3;
+}

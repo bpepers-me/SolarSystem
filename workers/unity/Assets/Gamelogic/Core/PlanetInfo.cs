@@ -14,7 +14,6 @@ namespace Assets.Gamelogic.Core
         public float diameter;          // relative to earth
         public float rotationPeriod;    // relative to earth
         public float orbitalPeriod;     // relative to earth
-        public float orbitRadius;       // relative to earth
 
         public float distanceFromSun()
         {
@@ -39,9 +38,6 @@ namespace Assets.Gamelogic.Core
                 data.diameter = 0.383f;
                 data.rotationPeriod = 58.8f;
                 data.orbitalPeriod = .241f;
-
-                data.orbitRadius = .3f;
-                data.diameter = .25f;
             }
 
             // venus
@@ -55,9 +51,6 @@ namespace Assets.Gamelogic.Core
                 data.diameter = 0.949f;
                 data.rotationPeriod = -244.0f;
                 data.orbitalPeriod = .615f;
-
-                data.orbitRadius = .6f;
-                data.diameter = .95f;
             }
 
             // earth
@@ -71,9 +64,6 @@ namespace Assets.Gamelogic.Core
                 data.diameter = 1.0f;
                 data.rotationPeriod = 1.0f;
                 data.orbitalPeriod = 1.0f;
-
-                data.orbitRadius = 1f;
-                data.diameter = 1f;
             }
 
             // mars
@@ -85,11 +75,8 @@ namespace Assets.Gamelogic.Core
                 data.z = 0.0305856f;
                 data.mass = 0.107f;
                 data.diameter = 0.532f;
-                data.rotationPeriod = 1.03f;
+                data.rotationPeriod = 1.025957f;
                 data.orbitalPeriod = 1.88f;
-
-                data.orbitRadius = 1.3f;
-                data.diameter = .5f;
             }
 
             // jupiter
@@ -103,9 +90,6 @@ namespace Assets.Gamelogic.Core
                 data.diameter = 11.21f;
                 data.rotationPeriod = .415f;
                 data.orbitalPeriod = 11.9f;
-
-                data.orbitRadius = 2.5f;
-                data.diameter = 3f;
             }
 
             // saturn
@@ -119,9 +103,6 @@ namespace Assets.Gamelogic.Core
                 data.diameter = 9.45f;
                 data.rotationPeriod = .445f;
                 data.orbitalPeriod = 29.4f;
-
-                data.orbitRadius = 4f;
-                data.diameter = 2.5f;
             }
 
             // uranus
@@ -135,9 +116,6 @@ namespace Assets.Gamelogic.Core
                 data.diameter = 4.01f;
                 data.rotationPeriod = -.720f;
                 data.orbitalPeriod = 83.7f;
-
-                data.orbitRadius = 6f;
-                data.diameter = 2f;
             }
 
             // neptune
@@ -151,9 +129,6 @@ namespace Assets.Gamelogic.Core
                 data.diameter = 3.88f;
                 data.rotationPeriod = .673f;
                 data.orbitalPeriod = 163.7f;
-
-                data.orbitRadius = 8f;
-                data.diameter = 1.3f;
             }
 
             // pluto
@@ -167,9 +142,6 @@ namespace Assets.Gamelogic.Core
                 data.diameter = 0.186f;
                 data.rotationPeriod = 6.41f;
                 data.orbitalPeriod = 247.9f;
-
-                data.orbitRadius = 10f;
-                data.diameter = .25f;
             }
 
             return data;

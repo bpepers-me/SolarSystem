@@ -22,8 +22,8 @@ GameObject:
   - component: {fileID: 33657550442586198}
   - component: {fileID: 23927155273568922}
   - component: {fileID: 114292073284908364}
-  - component: {fileID: 114864013523757196}
-  - component: {fileID: 114229855183349450}
+  - component: {fileID: 114730500220149760}
+  - component: {fileID: 114581300244673068}
   m_Layer: 0
   m_Name: Asteroid
   m_TagString: Untagged
@@ -59,7 +59,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 0d5c46a64271fd6469af9f6d74d74281, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -85,18 +85,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1329995892087974}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114229855183349450
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1329995892087974}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 985dc04b06e6bca42b1f7656cff036bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &114292073284908364
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -108,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3de01a43f0cad9459a470d545200b3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114864013523757196
+--- !u!114 &114581300244673068
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -119,3 +108,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bedc7aaae575ad4fa5f21f0bee0673a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114730500220149760
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1329995892087974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15ea2e61c77771d489150a36bf5b8651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  folderName: Asteroids

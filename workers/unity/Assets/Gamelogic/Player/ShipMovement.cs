@@ -4,6 +4,7 @@ using Improbable.Core;
 using Improbable.Ship;
 using Improbable.Unity.Visualizer;
 using UnityEngine;
+using Vector3d = UnityEngine.Vector3d;
 
 namespace Assets.Gamelogic.Player
 {
@@ -15,7 +16,7 @@ namespace Assets.Gamelogic.Player
          * which has write-access for its Position and Rotation components.
          */
         [Require] private Position.Writer PositionWriter;
-        [Require] private Rotation.Writer RotationWriter;
+        [Require] private TransformInfo.Writer TransformInfoWriter;
         [Require] protected ShipControls.Reader ShipControlsReader;
 
         private float targetSpeed; // [-1..1]
@@ -24,16 +25,21 @@ namespace Assets.Gamelogic.Player
         private float currentSteering; // [-1..1]
 
         [SerializeField] private Rigidbody myRigidbody;
-        [SerializeField] private float MovementSpeed;
-        [SerializeField] private float TurningSpeed;
+        [SerializeField] private float MovementSpeed = 10000.0f;
+        [SerializeField] private float TurningSpeed = 1.0f;
         [SerializeField] private AudioSource boatMovementAudio;
 
         private void OnEnable()
         {
             // Initialize entity's gameobject transform from Position and Rotation component values
-            transform.position = PositionWriter.Data.coords.ToUnityVector();
-            transform.rotation = RotationWriter.Data.rotation.ToUnityQuaternion();
+            var position = TransformInfoWriter.Data.position.FromImprobable();
+            var rotation = TransformInfoWriter.Data.rotation.FromImprobable();
+
+            transform.localPosition = (Vector3)(position / Scales.unityFactor);
+            transform.localRotation = rotation;
+
             myRigidbody.inertiaTensorRotation = UnityEngine.Quaternion.identity;
+            ShipControlsReader.WarpTriggered.Add(OnWarp);
         }
 
         // Calculate speed and steer values ready from input for next physics actions in FixedUpdate
@@ -95,21 +101,17 @@ namespace Assets.Gamelogic.Player
 
         private void SendPositionAndRotationUpdates()
         {
-            PositionWriter.Send(new Position.Update().SetCoords(transform.position.ToImprobable()));
-            RotationWriter.Send(new Rotation.Update().SetRotation(transform.rotation.ToImprobable()));
-        }
-    }
+            var unityPosition = transform.localPosition;
+            var position = new Vector3d(unityPosition.x * Scales.unityFactor, unityPosition.y * Scales.unityFactor, unityPosition.z * Scales.unityFactor);
+            var spatialPosition = (Vector3)(position / Scales.spatialFactor);
 
-    public static class Vector3Extensions
-    {
-        public static Coordinates ToImprobable(this Vector3 vector3)
-        {
-            return new Coordinates(vector3.x, vector3.y, vector3.z);
+            PositionWriter.Send(new Position.Update().SetCoords(spatialPosition.ToImprobableCoordinates()));
+            TransformInfoWriter.Send(new TransformInfo.Update().SetPosition(position.ToImprobable()).SetRotation(transform.rotation.ToImprobable()));
         }
 
-        public static Improbable.Core.Quaternion ToImprobable(this UnityEngine.Quaternion q)
-        {
-            return new Improbable.Core.Quaternion(q.x, q.y, q.z, q.w);
-        }
+		private void OnWarp(Warp warp)
+		{
+			myRigidbody.position = new Vector3(0, 0, 0);
+		}
     }
 }

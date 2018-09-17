@@ -83,8 +83,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myRigidbody: {fileID: 54223198997607964}
-  MovementSpeed: 50
-  TurningSpeed: 100
+  MovementSpeed: 25000
+  TurningSpeed: 50
   boatMovementAudio: {fileID: 0}
 --- !u!114 &114403702903192286
 MonoBehaviour:

@@ -16,7 +16,7 @@ namespace Assets.Gamelogic.Planets
         void OnEnable()
         {
             var planetData = PlanetInfo.GetData(planetIndexReader.Data.index);
-            float diameter = planetData.diameter * 12742000f / 1.496e11f * 10000f;
+            float diameter = planetData.diameter * 12742f;
             transform.localScale = new Vector3(diameter, diameter, diameter);
 
             Material material = (Material)Resources.Load("Materials/" + planetData.name);

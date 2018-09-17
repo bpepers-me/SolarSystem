@@ -1,0 +1,17 @@
+package improbable.core;
+
+component OrbitInfo {
+	id = 1008;
+
+	// initial angle of orbit in degrees
+	float initial_angle = 1;
+
+	// orbit radius in kilometers
+	double orbit_radius = 2;
+
+	// orbit period in days
+	float orbit_period = 3;
+
+	// rotation period in days
+	float rotation_period = 4;
+}

@@ -4,6 +4,7 @@ using Improbable.Unity;
 using Improbable.Unity.Visualizer;
 using UnityEngine;
 using Assets.Gamelogic.Core;
+using Vector3d = UnityEngine.Vector3d;
 
 namespace Assets.Gamelogic.Planets
 {
@@ -14,65 +15,58 @@ namespace Assets.Gamelogic.Planets
         private Position.Writer positionWriter;
 
         [Require]
-        private Rotation.Writer rotationWriter;
+        private TransformInfo.Writer transformWriter;
 
         [Require]
-        private PlanetIndex.Reader planetIndexReader;
+        private OrbitInfo.Reader orbitInfoReader;
 
-		private const float orbitSpeed = 864000.0f;
-        private const float rotationSpeed = 24.0f;
-        private float time = 0;
-        private Assets.Gamelogic.Core. PlanetData planetData;
+        private const float timeFactor = 1f;
+
+        private float initialAngle;
+        private double orbitRadius;
+        private float orbitPeriod;
+        private float rotationPeriod;
 
         void OnEnable()
         {
-            transform.position = positionWriter.Data.coords.ToUnityVector();
-            transform.rotation = rotationWriter.Data.rotation.ToUnityQuaternion();
-            planetData = PlanetInfo.GetData(planetIndexReader.Data.index);
+            //transform.position = positionWriter.Data.coords.ToUnityVector();
+            //transform.rotation = rotationWriter.Data.rotation.ToUnityQuaternion();
+
+            initialAngle = orbitInfoReader.Data.initialAngle;
+            orbitRadius = orbitInfoReader.Data.orbitRadius;
+            orbitPeriod = orbitInfoReader.Data.orbitPeriod;
+            rotationPeriod = orbitInfoReader.Data.rotationPeriod;
         }
 
         public void FixedUpdate()
         {
-            var deltaTime = Time.deltaTime;
-            time += deltaTime;
-            transform.position = CalculatePosition(time);
-            transform.rotation = CalculateRotation(time);
-            positionWriter.Send(new Position.Update().SetCoords(transform.position.ToImprobable()));
-            rotationWriter.Send(new Rotation.Update().SetRotation(transform.rotation.ToImprobable()));
+            float time = Time.realtimeSinceStartup * timeFactor;
+
+            var position = CalculatePosition(time);
+            var rotation = CalculateRotation(time);
+
+			// Convert to SpatialOS space
+			var spatialPosition = position / Scales.spatialFactor;
+
+            positionWriter.Send(new Position.Update().SetCoords(spatialPosition.ToImprobableCoordinates()));
+            transformWriter.Send(new TransformInfo.Update().SetPosition(position.ToImprobable()).SetRotation(rotation.ToImprobable()));
         }
 
-        private Vector3 CalculatePosition(float time)
+        private Vector3d CalculatePosition(float time)
         {
             // TODO: this calculates the orbit as a circle but should be an ellipse
-			float days = time * orbitSpeed / 86400.0f;
-			float orbitalPeriod = planetData.orbitalPeriod * 365.0f;
-			float angle = (days % orbitalPeriod) / orbitalPeriod * 360f;
+			float days = time / (24f * 60f * 60f);
+			float angle = (initialAngle + (days % orbitPeriod) / orbitPeriod * 360f) % 360f;
 			UnityEngine.Quaternion q = UnityEngine.Quaternion.Euler(0, angle, 0);
-			return q * new Vector3(planetData.orbitRadius, 0, 0);
+            var position = q * new Vector3((float)orbitRadius, 0f, 0f);
+            return new Vector3d(position.x, position.y, position.z);
         }
 
         private UnityEngine.Quaternion CalculateRotation(float time)
         {
-            float hours = time * rotationSpeed / 3600.0f;
-            float rotationPeriod = planetData.rotationPeriod;
+            float hours = time / (60f * 60f);
             float angle = (hours % rotationPeriod) / rotationPeriod * 360f;
             return UnityEngine.Quaternion.Euler(0, angle, 0);
-        }
-    }
-
-    public static class Vector3Extensions
-    {
-        public static Coordinates ToImprobable(this Vector3 vector3)
-        {
-            return new Coordinates(vector3.x, vector3.y, vector3.z);
-        }
-    }
-
-    public static class QuaternionExtensions
-    {
-        public static Improbable.Core.Quaternion ToImprobable(this UnityEngine.Quaternion quat)
-        {
-            return new Improbable.Core.Quaternion(quat.x, quat.y, quat.z, quat.w);
         }
     }
 }

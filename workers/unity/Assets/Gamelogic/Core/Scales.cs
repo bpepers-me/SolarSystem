@@ -3,6 +3,12 @@ using System.Collections;
 
 public static class Scales
 {
+    public const double spatialFactor = 1000000.0;  // SpatialOS units are in millions of km's so divide by this to get those units
+    public const double unityFactor = 1000.0;       // Unity units are in thousands of km's so divide by this to get those units
+
+    public const double au2km = 149597870.7;        // convert AU to km
+    public const double earthDiameter = 12742.0;    // in km
+
     public const float earthMass = 5.9722e24f;          // in kg
     public const float earthTilt = 7.155f;              // in degrees (to sun's equator)
     public const float earthRotationPeriod = 1f;        // in days
@@ -20,10 +26,6 @@ public static class Scales
     public const float y2tmu = 720f;
     public const float tmu2y = 1 / y2tmu;
     public const float y2sec = 31556926f;
-    public const float au2km = 149600000f;
-    public const float km2au = 1 / au2km;
-    public const float velmu2kms = (mu2au * au2km) / (tmu2y * y2sec);
-    public const float kms2velmu = 1 / velmu2kms;
     public static float GM = Mathf.Pow(2 * Mathf.PI / y2tmu, 2f) * Mathf.Pow(au2mu, 3f);
     private static bool pause = false;
     private static float TimaScaleFactor = 2.0f;

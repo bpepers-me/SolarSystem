@@ -1,0 +1,96 @@
+Coordinate Systems:
+
+- SpatialOS coordinates measured in millions of km's which means the furthest value is the orbit of pluto at 5906 Mkm
+- Unity coordinates measured in km's (will need to figure out what is the furthest object we might be able to see at that scale)
+
+
+Earth:
+
+- diameter of 12742 km
+- orbit of 149,598,023 km
+- orbit period of 365.256363004 days
+- rotation period of .99726968 days
+- inclination of 7.155 degrees to Sun's equator
+- axial tilt 23.4392811 degrees to its orbital plane
+
+
+Mars:
+
+- diameter of 6779 km
+- orbit of 227,939,200 km
+- orbit period of 686.971 days
+- rotation period of 1.025957 days
+- inclination of 5.65 degrees to Sun's equator
+- axial tilt 25.19 degrees to its orbital plane
+
+
+Planet Entity:
+- has a Position component for SpatialOS (in millions of km)
+- has a TransformInfo component which has the Unity position, rotation, and scale
+- has an OrbitInfo component with the information on it's orbit (radius, period, ...)
+- has a PlanetIndex component so we know which planet it is and we can set the mesh used
+
+Planet Prefab:
+- has a Mesh Filter (sphere) and Mesh Renderer
+- has a PlanetSetup script which runs on the client and gets the planet index and sets the mesh material from it
+- has a Reparent script which moves the newly created game objects to a given folder
+- has a TransformReceiver script which runs on both client and server workers which receives TransformInfo component updates and
+  updates the game object transform from it
+- has a PlanetOrbit script which runs on the server worker with write authority on the TransformInfo and Position.  It reads the
+  OrbitInfo component and then calculates the position and rotation.  Updates the TransformInfo and Position on the entity.
+
+Asteroid Entity:
+- has a Position component for SpatialOS (in millions of km)
+- has a TransformInfo component which has the Unity position, rotation, and scale
+- has an OrbitInfo component with the information on it's orbit (radius, period, ...)
+
+Asteroid Prefab:
+- has a Mesh Filter (sphere) and Mesh Renderer
+- has a Reparent script which moves the newly created game objects to a given folder
+- has a TransformReceiver script which runs on both client and server workers which receives TransformInfo component updates and
+  updates the game object transform from it
+- has a PlanetOrbit script which runs on the server worker with write authority on the TransformInfo and Position.  It reads the
+  OrbitInfo component and then calculates the position and rotation.  Updates the TransformInfo and Position on the entity.
+
+Player Entity:
+- has a Position component for SpatialOS (in millions of km)
+- has a TransformInfo component which has the Unity position, rotation, and scale
+- has a ShipControls component with the requested control changes
+- has a ClientAuthorityCheck component which can be used to make sure scripts run only on the authoritative client
+- has a ClientConnection component for tracking heartbeats and noticing when a player has disconnected
+
+Player Prefab:
+- has a rigid body to control movement
+- has a HandleClientConnection script which runs on the server worker.  It keeps track of missed beats from the client and will
+  disconnect the player if too many are missed
+- has a SendClientConnection script which runs on the client worker.  It sends heartbeat commands to the server.
+- has a PlayerInputController script which runs on the client worker.  It handles player input to control movement and updates the
+  target speed and steering
+- has a ShipMovement script which runs on the client and server workers.  It gets the target speed/steering and applies them to
+  the rigid body as forces.  It gets the position and rotation from the game object and updates the Position and TransformInfo
+  components.
+- has a CameraEnablerVisualizer script which runs on the authoritative client worker.  It moves the camera in the scene under the
+  player game object when it's enabled.  Can also apply an offset to allow for camera to be behind the player.
+
+
+
+To Do:
+
+- get all basics of players, planets, and asteroids working:
+	- orbits and rotates
+	- can move around
+	- mesh
+- add time factor and way to set it from UI
+- add warp to planet by number key
+- add portals to warp to planet with visual of whats on other side
+- add sun game object
+- add star skybox
+- better planet visuals
+- scale up to 100K orbiting objects
+
+
+Stretch Goals:
+
+- deploy to cloud
+- have multiple deployments and can select from them at start
+- ability to warp to a different deployment

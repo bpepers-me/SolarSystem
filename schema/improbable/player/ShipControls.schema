@@ -2,6 +2,10 @@ package improbable.ship;
 
 type Fire {}
 
+type Warp {
+	uint32 planet_index = 1;
+}
+
 component ShipControls {
     // Component ID, unique within the project
     id = 1011;
@@ -13,4 +17,7 @@ component ShipControls {
 
     // The component event for triggering firing
     event Fire fire;
+
+	// The component event for triggering warping
+	event Warp warp;
 }

@@ -8,42 +8,48 @@ namespace Assets.Gamelogic.Core
 {
     public class TransformReceiver : MonoBehaviour
     {
-        [Require] private Position.Reader PositionReader;
-        [Require] private Rotation.Reader RotationReader;
+        [Require] private TransformInfo.Reader transformReader;
 
         void OnEnable()
         {
-            transform.position = PositionReader.Data.coords.ToUnityVector();
-            transform.rotation = RotationReader.Data.rotation.ToUnityQuaternion();
+            var position = transformReader.Data.position.FromImprobable();
+			var rotation = transformReader.Data.rotation.FromImprobable();
+			var scale = transformReader.Data.scale.FromImprobable();
 
-            PositionReader.ComponentUpdated.Add(OnPositionUpdated);
-            RotationReader.ComponentUpdated.Add(OnRotationUpdated);
+			var unityPosition = (Vector3)(position / Scales.unityFactor);
+			var unityScale = (Vector3)(scale / Scales.unityFactor);
+
+			transform.localPosition = unityPosition;
+            transform.localRotation = rotation;
+			transform.localScale = unityScale;
+
+            transformReader.ComponentUpdated.Add(OnTransformUpdated);
         }
 
         void OnDisable()
         {
-            PositionReader.ComponentUpdated.Remove(OnPositionUpdated);
-            RotationReader.ComponentUpdated.Remove(OnRotationUpdated);
+            transformReader.ComponentUpdated.Remove(OnTransformUpdated);
         }
 
-        void OnPositionUpdated(Position.Update update)
+        void OnTransformUpdated(TransformInfo.Update update)
         {
-            if (PositionReader.Authority == Authority.NotAuthoritative)
+            if (transformReader.Authority == Authority.NotAuthoritative)
             {
-                if (update.coords.HasValue)
+                if (update.position.HasValue)
                 {
-                    transform.position = update.coords.Value.ToUnityVector();
+					var position = update.position.Value.FromImprobable();
+					var unityPosition = (Vector3)(position / Scales.unityFactor);
+                    transform.localPosition = unityPosition;
                 }
-            }
-        }
-
-        void OnRotationUpdated(Rotation.Update update)
-        {
-            if (RotationReader.Authority == Authority.NotAuthoritative)
-            {
                 if (update.rotation.HasValue)
                 {
-                    transform.rotation = update.rotation.Value.ToUnityQuaternion();
+                    transform.localRotation = update.rotation.Value.FromImprobable();
+                }
+                if (update.scale.HasValue)
+                {
+					var scale = update.scale.Value.FromImprobable();
+					var unityScale = (Vector3)(scale / Scales.unityFactor);
+                    transform.localScale = unityScale;
                 }
             }
         }

@@ -41,6 +41,11 @@ namespace Assets.Gamelogic.Player
             {
                 //ShipControlsWriter.Send(new ShipControls.Update().AddFireRight(new FireRight()));
             }
+
+            if (Input.GetKeyDown(KeyCode.Keypad3))
+            {
+                ShipControlsWriter.Send(new ShipControls.Update().AddWarp(new Warp(2)));
+            }
         }
     }
 }

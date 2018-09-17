@@ -17,7 +17,8 @@ namespace Assets.Gamelogic.Player
         [Require]
         private ClientAuthorityCheck.Writer ClientAuthorityCheckWriter;
 
-        private Transform Camera;
+        private UnityEngine.Transform Camera;
+
         [SerializeField]
         private Vector3 CameraOffset;
 

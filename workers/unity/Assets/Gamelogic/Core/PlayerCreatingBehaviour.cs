@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Improbable.Collections;
 using System.Linq;
 using Improbable.Unity.Core.Acls;
+using Vector3d = UnityEngine.Vector3d;
 
 namespace Assets.Gamelogic.Core
 {
@@ -99,14 +100,14 @@ namespace Assets.Gamelogic.Core
         private void CreatePlayerEntity(string clientWorkerId,
                                         ResponseHandle<PlayerCreation.Commands.CreatePlayer, CreatePlayerRequest, CreatePlayerResponse> responseHandle)
         {
-            var playerEntityTemplate = EntityTemplateFactory.CreatePlayerTemplate(clientWorkerId, gameObject.EntityId(), new Vector3(0, 0, 0));
+            var playerEntityTemplate = EntityTemplateFactory.CreatePlayerTemplate(clientWorkerId, gameObject.EntityId(), new Vector3d(0, 0, 0));
             SpatialOS.Commands.CreateEntity(PlayerCreationWriter, playerEntityTemplate)
                 .OnSuccess(response =>
                      {
                          AddPlayerEntityId(clientWorkerId, response.CreatedEntityId);
                          RequestEnded(responseHandle, ResponseCode.SuccessfullyCreated);
                      })
-                     .OnFailure(failure => RequestEnded(responseHandle, ResponseCode.Failure, failure.StatusCode));
+                .OnFailure(failure => RequestEnded(responseHandle, ResponseCode.Failure, failure.StatusCode));
         }
 
         private void CheckPlayerEntityExists(EntityId playerEntityId, Action<bool> onSuccess, Action<StatusCode> onFailure)
