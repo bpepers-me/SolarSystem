@@ -21,25 +21,25 @@ namespace Assets.Gamelogic.Planets
         private OrbitInfo.Reader orbitInfoReader;
 
         private const double timeFactor = 1.0;
-        private double time;
 
         private double initialAngle;
         private double orbitRadius;
         private double orbitPeriod;
         private double rotationPeriod;
+        private double axialTilt;
 
         void OnEnable()
         {
-            time = 0.0;
             initialAngle = orbitInfoReader.Data.initialAngle;
             orbitRadius = orbitInfoReader.Data.orbitRadius;
             orbitPeriod = orbitInfoReader.Data.orbitPeriod;
             rotationPeriod = orbitInfoReader.Data.rotationPeriod;
+            axialTilt = 14.0;
         }
 
         public void FixedUpdate()
         {
-            time += Time.fixedDeltaTime * timeFactor;
+            var time = Time.realtimeSinceStartup * timeFactor;
 
             var position = CalculatePosition(time);
             var rotation = CalculateRotation(time);
@@ -65,7 +65,7 @@ namespace Assets.Gamelogic.Planets
         {
             double hours = time / (60.0 * 60.0);
             double angle = (hours % rotationPeriod) / rotationPeriod * 360.0;
-            return UnityEngine.Quaternion.Euler(0, (float)angle, 0);
+            return UnityEngine.Quaternion.Euler(0, (float)angle, (float)axialTilt);
         }
     }
 }

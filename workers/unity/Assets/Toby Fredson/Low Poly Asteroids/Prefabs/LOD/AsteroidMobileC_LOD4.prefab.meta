@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 5d6333454d0caa042bdfd32b5273fc4f
+labels:
+- asteroids
+- debris
+- gameready
+- lowpoly
+- pbr
+- rocks
+- sf
+- space
+timeCreated: 1513381366
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: prefabs
+  assetBundleVariant: 

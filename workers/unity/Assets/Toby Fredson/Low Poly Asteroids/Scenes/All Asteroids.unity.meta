@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 06139f41dc0f68449b4d4ede713eaf3c
+labels:
+- asteroids
+- debris
+- gameready
+- lowpoly
+- pbr
+- rocks
+- sf
+- space
+timeCreated: 1476448326
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: scenes
+  assetBundleVariant: 

@@ -64,7 +64,7 @@ namespace Assets.Gamelogic.EntityTemplates
 			var scale = new Vector3d(diameter, diameter, diameter);
             var spatialPosition = position / Scales.spatialFactor;
 
-            var prefabName = (planetIndex == 5 || planetIndex == 7) ? SimulationSettings.RingedPlanetPrefabName : SimulationSettings.PlanetPrefabName;
+            var prefabName = (planetIndex == 5 || planetIndex == 6) ? SimulationSettings.RingedPlanetPrefabName : SimulationSettings.PlanetPrefabName;
 
             var planetTemplate = EntityBuilder.Begin()
                 .AddPositionComponent((Vector3)spatialPosition, CommonRequirementSets.PhysicsOnly)

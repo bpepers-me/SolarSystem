@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 988a5c2b2baf9d742a0d05aef3002495
+labels:
+- asteroids
+- debris
+- gameready
+- lowpoly
+- pbr
+- rocks
+- sf
+- space
+timeCreated: 1476452042
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: materials
+  assetBundleVariant: 
