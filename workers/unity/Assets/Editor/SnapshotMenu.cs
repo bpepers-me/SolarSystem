@@ -20,13 +20,13 @@ namespace Assets.Editor
 			snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreatePlayerCreatorTemplate());
 
 			// create the planets
-            for (uint i = 0; i < 8; ++i)
+            for (uint i = 0; i < 9; ++i)
             {
                 snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreatePlanetTemplate(i));
             }
 
 			// create the asteroid belt
-            for (int i = 0; i < 10000; ++i)
+            for (int i = 0; i < 1000; ++i)
             {
                 float angle = Random.Range(-180f, 180f);
 
