@@ -64,9 +64,11 @@ namespace Assets.Gamelogic.EntityTemplates
 			var scale = new Vector3d(diameter, diameter, diameter);
             var spatialPosition = position / Scales.spatialFactor;
 
+            var prefabName = (planetIndex == 5 || planetIndex == 7) ? SimulationSettings.RingedPlanetPrefabName : SimulationSettings.PlanetPrefabName;
+
             var planetTemplate = EntityBuilder.Begin()
                 .AddPositionComponent((Vector3)spatialPosition, CommonRequirementSets.PhysicsOnly)
-                .AddMetadataComponent(entityType: SimulationSettings.PlanetPrefabName)
+                .AddMetadataComponent(entityType: prefabName)
                 .SetPersistence(true)
                 .SetReadAcl(CommonRequirementSets.PhysicsOrVisual)
                 .AddComponent(new TransformInfo.Data(position.ToImprobable(), rotation.ToImprobable(), scale.ToImprobable()), CommonRequirementSets.PhysicsOnly)

@@ -10,6 +10,7 @@ using Improbable.Unity.Visualizer;
 using UnityEngine;
 using Vector3d = UnityEngine.Vector3d;
 using Improbable.Worker;
+using Assets.Gamelogic.Core;
 
 namespace Assets.Gamelogic.Player
 {
@@ -119,7 +120,9 @@ namespace Assets.Gamelogic.Player
 		{
             if (warp.planetIndex == 999)
             {
-                myRigidbody.position = new Vector3(0f, 0f, 0f);
+                myRigidbody.position = new Vector3(0f, 0f, -340f);
+                myRigidbody.rotation = UnityEngine.Quaternion.Euler(0, 0, 0);
+                myRigidbody.velocity = Vector3.zero;
                 return;
             }
 
@@ -134,11 +137,20 @@ namespace Assets.Gamelogic.Player
                         {
                             var position = entity.Get<TransformInfo>().Value.Get().Value.position.FromImprobable();
                             var unityPosition = (Vector3)(position / Scales.unityFactor);
+
+                            var data = PlanetInfo.GetData(warp.planetIndex);
+                            var diameter = data.diameter * Scales.earthDiameter / Scales.unityFactor;
+                            unityPosition -= unityPosition.normalized * (float)diameter * 2f;
+
                             myRigidbody.position = unityPosition;
+                            myRigidbody.rotation = UnityEngine.Quaternion.LookRotation(unityPosition);
+                            myRigidbody.velocity = Vector3.zero;
                         }
                     }
                 })
-                .OnFailure(errorDetails => Debug.Log("Planet query failed: " + errorDetails));
+                .OnFailure(errorDetails => {
+                    Debug.Log("Planet query failed: " + errorDetails);
+                });
 		}
     }
 }

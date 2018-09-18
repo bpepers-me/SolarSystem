@@ -22,8 +22,8 @@ namespace Assets.Gamelogic.Planets
 
             if (planetData.name == "Saturn")
             {
-                var folder = new GameObject("Rings");
-                folder.transform.parent = transform;
+                //var folder = new GameObject("Rings");
+                //folder.transform.parent = transform;
             }
         }
     }

@@ -25,7 +25,7 @@ namespace Assets.Gamelogic.Player
 
         void Update()
         {
-			uint warpSpeed = 1;
+			uint warpSpeed = 0;
 			if (Input.GetKey(KeyCode.LeftShift))
 			{
 				warpSpeed += 1;
