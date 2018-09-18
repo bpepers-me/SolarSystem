@@ -17,8 +17,14 @@ namespace Assets.Gamelogic.Planets
         {
             var planetData = PlanetInfo.GetData(planetIndexReader.Data.index);
 
-            Material material = (Material)Resources.Load("Materials/" + planetData.name);
+            Material material = (Material)Resources.Load("Materials/" + planetData.name + "_mat");
             GetComponent<Renderer>().material = material;
+
+            if (planetData.name == "Saturn")
+            {
+                var folder = new GameObject("Rings");
+                folder.transform.parent = transform;
+            }
         }
     }
 }

@@ -25,12 +25,22 @@ namespace Assets.Gamelogic.Player
 
         void Update()
         {
+			uint warpSpeed = 1;
+			if (Input.GetKey(KeyCode.LeftShift))
+			{
+				warpSpeed += 1;
+			}
+			if (Input.GetKey(KeyCode.LeftControl))
+			{
+				warpSpeed += 2;
+			}
+			
             shipControlsWriter.Send(new ShipControls.Update()
                 .SetTargetSpeed(Input.GetAxis("Vertical"))
                 .SetTargetSteering(Input.GetAxis("Horizontal"))
-				.SetWarpSpeed(Input.GetKey(KeyCode.LeftShift)));
+				.SetWarpSpeed(warpSpeed));
 
-            if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha3))
+            if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Alpha0))
             {
                 shipControlsWriter.Send(new ShipControls.Update().AddWarp(new Warp(999)));
             }

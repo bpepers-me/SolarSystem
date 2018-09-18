@@ -84,7 +84,7 @@ namespace Assets.Gamelogic.Player
             SendPositionAndRotationUpdates();
         }
 
-        private void ApplyPhysicsToShip(bool warpSpeed, double deltaTime)
+        private void ApplyPhysicsToShip(uint warpSpeed, double deltaTime)
         {
             var velocityChange = CalculateVelocityChange(warpSpeed, deltaTime);
             var torqueToApply = CalculateTorqueToApply(deltaTime);
@@ -93,10 +93,10 @@ namespace Assets.Gamelogic.Player
             myRigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
         }
 
-        private Vector3 CalculateVelocityChange(bool warpSpeed, double deltaTime)
+        private Vector3 CalculateVelocityChange(uint warpSpeed, double deltaTime)
         {
             var currentVelocity = myRigidbody.velocity;
-            var targetVelocity = transform.localRotation * Vector3.forward * (float)(currentSpeed * deltaTime * MovementSpeed * (warpSpeed ? 10.0 : 1.0));
+            var targetVelocity = transform.localRotation * Vector3.forward * (float)(currentSpeed * deltaTime * MovementSpeed * Mathf.Pow(10f, (float)warpSpeed));
             return targetVelocity - currentVelocity;
         }
 
