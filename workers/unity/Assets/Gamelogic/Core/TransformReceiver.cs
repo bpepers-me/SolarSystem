@@ -12,7 +12,7 @@ namespace Assets.Gamelogic.Core
 
         void OnEnable()
         {
-            var position = transformReader.Data.position.FromImprobable();
+            var position = transformReader.Data.position.FromImprobable() - FloatingOrigin.offset;
 			var rotation = transformReader.Data.rotation.FromImprobable();
 			var scale = transformReader.Data.scale.FromImprobable();
 
@@ -37,8 +37,10 @@ namespace Assets.Gamelogic.Core
             {
                 if (update.position.HasValue)
                 {
-					var position = update.position.Value.FromImprobable();
+                    var position = update.position.Value.FromImprobable() - FloatingOrigin.offset;
 					var unityPosition = (Vector3)(position / Scales.unityFactor);
+                    //Debug.Log(position.ToString());
+                    //Debug.Log(unityPosition.ToString());
                     transform.localPosition = unityPosition;
                 }
                 if (update.rotation.HasValue)

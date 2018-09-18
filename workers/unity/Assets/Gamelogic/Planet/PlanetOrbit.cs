@@ -20,15 +20,17 @@ namespace Assets.Gamelogic.Planets
         [Require]
         private OrbitInfo.Reader orbitInfoReader;
 
-        private const float timeFactor = 1f;
+        private const double timeFactor = 1.0;
+        private double time;
 
-        private float initialAngle;
+        private double initialAngle;
         private double orbitRadius;
-        private float orbitPeriod;
-        private float rotationPeriod;
+        private double orbitPeriod;
+        private double rotationPeriod;
 
         void OnEnable()
         {
+            time = 0.0;
             initialAngle = orbitInfoReader.Data.initialAngle;
             orbitRadius = orbitInfoReader.Data.orbitRadius;
             orbitPeriod = orbitInfoReader.Data.orbitPeriod;
@@ -37,7 +39,7 @@ namespace Assets.Gamelogic.Planets
 
         public void FixedUpdate()
         {
-            float time = Time.realtimeSinceStartup * timeFactor;
+            time += Time.fixedDeltaTime * timeFactor;
 
             var position = CalculatePosition(time);
             var rotation = CalculateRotation(time);
@@ -49,21 +51,21 @@ namespace Assets.Gamelogic.Planets
             transformWriter.Send(new TransformInfo.Update().SetPosition(position.ToImprobable()).SetRotation(rotation.ToImprobable()));
         }
 
-        private Vector3d CalculatePosition(float time)
+        private Vector3d CalculatePosition(double time)
         {
             // TODO: this calculates the orbit as a circle but should be an ellipse
-			float days = time / (24f * 60f * 60f);
-			float angle = (initialAngle + (days % orbitPeriod) / orbitPeriod * 360f) % 360f;
-			UnityEngine.Quaternion q = UnityEngine.Quaternion.Euler(0, angle, 0);
-            var position = q * new Vector3((float)orbitRadius, 0f, 0f);
-            return new Vector3d(position.x, position.y, position.z);
+            double secondsInOrbit = orbitPeriod * 24.0 * 60.0 * 60.0;
+            double angle = (initialAngle + (time % secondsInOrbit) * 360.0 / secondsInOrbit) % 360.0;
+            double x = Mathd.Cos(angle * Mathd.Deg2Rad) * orbitRadius;
+            double z = Mathd.Sin(angle * Mathd.Deg2Rad) * orbitRadius;
+            return new Vector3d(x, 0.0, z);
         }
 
-        private UnityEngine.Quaternion CalculateRotation(float time)
+        private UnityEngine.Quaternion CalculateRotation(double time)
         {
-            float hours = time / (60f * 60f);
-            float angle = (hours % rotationPeriod) / rotationPeriod * 360f;
-            return UnityEngine.Quaternion.Euler(0, angle, 0);
+            double hours = time / (60.0 * 60.0);
+            double angle = (hours % rotationPeriod) / rotationPeriod * 360.0;
+            return UnityEngine.Quaternion.Euler(0, (float)angle, 0);
         }
     }
 }

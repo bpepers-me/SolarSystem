@@ -19,7 +19,7 @@ namespace Assets.Gamelogic.Player
     {
         /*
          * An entity with this MonoBehaviour will have it enabled only for the single worker (whether client or server)
-         * which has write-access for its Position and Rotation components.
+         * which has write-access for its Position and TransformInfo components.
          */
         [Require] private Position.Writer PositionWriter;
         [Require] private TransformInfo.Writer TransformInfoWriter;
@@ -38,7 +38,7 @@ namespace Assets.Gamelogic.Player
         private void OnEnable()
         {
             // Initialize entity's gameobject transform from Position and Rotation component values
-            var position = TransformInfoWriter.Data.position.FromImprobable();
+            var position = TransformInfoWriter.Data.position.FromImprobable() - FloatingOrigin.offset;
             var rotation = TransformInfoWriter.Data.rotation.FromImprobable();
 
             transform.localPosition = (Vector3)(position / Scales.unityFactor);
@@ -140,7 +140,7 @@ namespace Assets.Gamelogic.Player
 
                             var data = PlanetInfo.GetData(warp.planetIndex);
                             var diameter = data.diameter * Scales.earthDiameter / Scales.unityFactor;
-                            unityPosition -= unityPosition.normalized * (float)diameter * 2f;
+                            unityPosition -= unityPosition.normalized * (float)diameter * 3f;
 
                             myRigidbody.position = unityPosition;
                             myRigidbody.rotation = UnityEngine.Quaternion.LookRotation(unityPosition);
